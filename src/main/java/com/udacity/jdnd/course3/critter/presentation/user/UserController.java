@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.presentation.user;
 
 import org.springframework.web.bind.annotation.*;
 
