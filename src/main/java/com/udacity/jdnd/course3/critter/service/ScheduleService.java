@@ -32,12 +32,12 @@ public class ScheduleService {
 
   public List<Schedule> getAllByEmployee(Long id) {
     logger.info("Finding by employee with id: " + id);
-    return scheduleRepository.findByEmployee(id);
+    return scheduleRepository.findByEmployeeIds(id);
   }
 
   public List<Schedule> getAllByPet(Long id) {
     logger.info("Finding by pet with id: " + id);
-    return scheduleRepository.findByPet(id);
+    return scheduleRepository.findByPetIds(id);
   }
 
   public List<Schedule> getAllByOwner(Long id) {
