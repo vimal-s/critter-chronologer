@@ -1,13 +1,13 @@
 package com.udacity.jdnd.course3.critter.presentation.user;
 
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
+import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.UserService;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,14 @@ public class UserController {
 
   @PostMapping("/employee")
   public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-    throw new UnsupportedOperationException();
+    logger.info("received from client: " + employeeDTO);
+
+    Employee employee = dtoToEntity(employeeDTO);
+    employee = userService.save(employee);
+    logger.info("received from db: " + employee);
+
+    employeeDTO = entityToDto(employee);
+    return employeeDTO;
   }
 
   @PostMapping("/employee/{employeeId}")
@@ -89,6 +96,7 @@ public class UserController {
     throw new UnsupportedOperationException();
   }
 
+  // todo: combine customer dto and employee dto conversion methods
   private Customer dtoToEntity(CustomerDTO customerDTO) {
     Customer customer = new Customer();
 
@@ -107,5 +115,23 @@ public class UserController {
     logger.info("changed entity to dto: " + customerDTO);
 
     return customerDTO;
+  }
+
+  private Employee dtoToEntity(EmployeeDTO employeeDTO) {
+    Employee employee = new Employee();
+
+    BeanUtils.copyProperties(employeeDTO, employee);
+    logger.info("changed dto to entity: " + employee);
+
+    return employee;
+  }
+
+  private EmployeeDTO entityToDto(Employee employee) {
+    EmployeeDTO employeeDTO = new EmployeeDTO();
+
+    BeanUtils.copyProperties(employee, employeeDTO);
+    logger.info("changed entity to dto: " + employeeDTO);
+
+    return employeeDTO;
   }
 }
