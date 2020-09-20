@@ -30,6 +30,9 @@ public class Customer {
     @Nationalized
     private String notes;
 
+    public Customer() {
+    }
+
     // remove this constructor later
     public Customer(Long id, String name, String phoneNumber, List<Pet> pets, String notes) {
         this.id = id;
