@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
-  List<Schedule> findByEmployee(Long id);
+  List<Schedule> findByEmployeeIds(Long id);
 
-  List<Schedule> findByPet(Long id);
+  List<Schedule> findByPetIds(Long id);
 }
