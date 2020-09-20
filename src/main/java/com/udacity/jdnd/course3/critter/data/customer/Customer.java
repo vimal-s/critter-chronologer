@@ -3,6 +3,8 @@ package com.udacity.jdnd.course3.critter.data.customer;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Entity;
@@ -12,7 +14,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
-public class Customer {
+public class Customer implements Cloneable {
 
     @Id
     @GeneratedValue

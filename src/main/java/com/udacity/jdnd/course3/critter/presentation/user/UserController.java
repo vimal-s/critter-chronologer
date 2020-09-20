@@ -1,10 +1,14 @@
 package com.udacity.jdnd.course3.critter.presentation.user;
 
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
+import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.UserService;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,28 +33,35 @@ public class UserController {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final UserService userService;
+  private final PetService petService;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, PetService petService) {
     this.userService = userService;
+    this.petService = petService;
   }
 
   @PostMapping("/customer")
   public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-    logger.info("Received from client: " + customerDTO);
+    logger.info("received from client: " + customerDTO);
+
     Customer customer = dtoToEntity(customerDTO);
     customer = userService.save(customer);
-    logger.info("Received from db: " + customer);
+    logger.info("received from db: " + customer);
+
     customerDTO = entityToDto(customer);
     return customerDTO;
   }
 
   @GetMapping("/customer")
   public List<CustomerDTO> getAllCustomers() {
-    throw new UnsupportedOperationException();
+    return userService.getAllCustomers().stream()
+        .peek(customer -> logger.info("received from db: " + customer))
+        .map(this::entityToDto)
+        .collect(Collectors.toList());
   }
 
   @GetMapping("/customer/pet/{petId}")
-  public CustomerDTO getOwnerByPet(@PathVariable long petId) {
+  public CustomerDTO getOwnerByPet(@PathVariable long petId) throws Throwable {
     throw new UnsupportedOperationException();
   }
 
@@ -77,15 +88,21 @@ public class UserController {
 
   private Customer dtoToEntity(CustomerDTO customerDTO) {
     Customer customer = new Customer();
+
     BeanUtils.copyProperties(customerDTO, customer);
     logger.info("changed dto to entity: " + customer);
+
     return customer;
   }
 
   private CustomerDTO entityToDto(Customer customer) {
     CustomerDTO customerDTO = new CustomerDTO();
+
     BeanUtils.copyProperties(customer, customerDTO);
+    List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
+    customerDTO.setPetIds(petIds);
     logger.info("changed entity to dto: " + customerDTO);
+
     return customerDTO;
   }
 }
