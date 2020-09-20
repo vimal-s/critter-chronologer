@@ -61,9 +61,11 @@ public class UserService {
 
   public List<Employee> getEmployeesForService(Set<EmployeeSkill> skills, LocalDate date) {
     DayOfWeek day = date.getDayOfWeek();
-    // find employees with given skill and dayOfWeek here or in the repository
     // todo: replace this later
-    logger.info("finding employees: " + date.toString());
+    // find employees with given skill and dayOfWeek here or in the repository
+    logger.info("finding employees: " + date.toString() + " <- day -> " + day);
+    // todo: should only get employees if all their skills covers all the required skills
+    // at present even if one skill is matched the employee is added the list
     return employeeRepository.findAll().stream()
         .filter(
             employee ->

@@ -5,20 +5,15 @@ import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Handles web requests related to Users.
@@ -81,19 +76,32 @@ public class UserController {
   }
 
   @PostMapping("/employee/{employeeId}")
-  public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-    throw new UnsupportedOperationException();
+  public EmployeeDTO getEmployee(@PathVariable long employeeId) throws Throwable {
+    logger.info("received from client employeeId: " + employeeId);
+
+    Employee employee = userService.getEmployee(employeeId);
+    logger.info("received from db: " + employee);
+
+    return entityToDto(employee);
   }
 
   @PutMapping("/employee/{employeeId}")
   public void setAvailability(
-      @RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-    throw new UnsupportedOperationException();
+      @RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) throws Throwable {
+    logger.info("received from client: " + daysAvailable + " " + employeeId);
+
+    userService.setAvailability(daysAvailable, employeeId);
   }
 
   @GetMapping("/employee/availability")
   public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-    throw new UnsupportedOperationException();
+    logger.info("received from client: " + employeeDTO);
+    return userService
+        .getEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate())
+        .stream()
+        .peek(employee -> logger.info("received from db: " + employee))
+        .map(this::entityToDto)
+        .collect(Collectors.toList());
   }
 
   // todo: combine customer dto and employee dto conversion methods
