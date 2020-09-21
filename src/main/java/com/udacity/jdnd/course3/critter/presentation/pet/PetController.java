@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Pets.
@@ -65,17 +67,40 @@ public class PetController {
     }
 
     @GetMapping("/{petId}")
-    public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+    public PetDTO getPet(@PathVariable long petId) throws Throwable {
+        logger.info("received from client id: " + petId);
+
+        Pet pet = petService.getPet(petId);
+        logger.info("received from db: " + pet);
+
+        return entityToDTO(pet);
     }
 
     @GetMapping
     public List<PetDTO> getPets() {
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.getAllPets();
+        return petsToPetDTOS(pets);
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        logger.info("received from client: " + ownerId);
+
+        List<Pet> pets = petService.getPetsByOwner(ownerId);
+        return petsToPetDTOS(pets);
+    }
+
+    private List<PetDTO> petsToPetDTOS(List<Pet> pets) {
+        return pets.stream()
+                .peek(pet -> logger.info("received from db: " + pet))
+                .map(pet -> {
+                    try {
+                        return entityToDTO(pet);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .collect(Collectors.toList());
     }
 }

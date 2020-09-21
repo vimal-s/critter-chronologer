@@ -34,6 +34,7 @@ public class UserController {
     this.userService = userService;
   }
 
+  // todo: fix issue when petIds are received
   @PostMapping("/customer")
   public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
     logger.info("Received from client: " + customerDTO);
