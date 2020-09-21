@@ -46,4 +46,8 @@ public class PetService {
     logger.info("Retrieving owner with pet id: " + id);
     return getPet(id).getOwner();
   }
+
+  public boolean exists(Long petId) {
+    return petRepository.existsById(petId);
+  }
 }

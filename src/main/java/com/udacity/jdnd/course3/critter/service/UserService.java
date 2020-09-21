@@ -80,4 +80,8 @@ public class UserService {
                         .anyMatch(employeeSkill -> skills.stream().anyMatch(employeeSkill::equals)))
         .collect(Collectors.toList());
   }
+
+  public boolean exists(Long employeeId) {
+    return employeeRepository.existsById(employeeId);
+  }
 }

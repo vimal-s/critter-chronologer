@@ -30,7 +30,6 @@ public class Schedule {
     @ElementCollection
     private List<Long> petIds;
 
-
     @ElementCollection
     private Set<EmployeeSkill> activities;
 
