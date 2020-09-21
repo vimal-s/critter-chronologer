@@ -2,13 +2,17 @@ package com.udacity.jdnd.course3.critter.data.customer;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -67,7 +71,7 @@ public class Customer implements Cloneable {
     }
 
     public List<Pet> getPets() {
-        return Collections.unmodifiableList(pets);
+        return pets == null ? Collections.emptyList() : Collections.unmodifiableList(pets);
     }
 
     public void setPets(List<Pet> pets) {
@@ -84,13 +88,21 @@ public class Customer implements Cloneable {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", pets=" + pets +
-                ", notes='" + notes + '\'' +
-                '}';
+        return "Customer{"
+                + "id="
+                + id
+                + ", name='"
+                + name
+                + '\''
+                + ", phoneNumber='"
+                + phoneNumber
+                + '\''
+                + ", pets="
+                + pets
+                + ", notes='"
+                + notes
+                + '\''
+                + '}';
     }
 
     @Override

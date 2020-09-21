@@ -4,10 +4,11 @@ import java.time.DayOfWeek;
 import java.util.Set;
 
 /**
- * Represents the form that employee request and response data takes. Does not map
- * to the database directly.
+ * Represents the form that employee request and response data takes. Does not map to the database
+ * directly.
  */
 public class EmployeeDTO {
+
     private long id;
     private String name;
     private Set<EmployeeSkill> skills;
@@ -43,5 +44,20 @@ public class EmployeeDTO {
 
     public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeDTO{"
+                + "id="
+                + id
+                + ", name='"
+                + name
+                + '\''
+                + ", skills="
+                + skills
+                + ", daysAvailable="
+                + daysAvailable
+                + '}';
     }
 }
