@@ -3,12 +3,14 @@ package com.udacity.jdnd.course3.critter.data.pet;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.presentation.pet.PetType;
+
 import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -63,7 +65,7 @@ public class Pet {
     }
 
     public LocalDate getBirthDate() {
-        return LocalDate.from(birthDate);
+        return birthDate == null ? null : LocalDate.from(birthDate);
     }
 
     public void setBirthDate(LocalDate birthDate) {
@@ -71,7 +73,7 @@ public class Pet {
     }
 
     public Customer getOwner() throws CloneNotSupportedException {
-        return (Customer) owner.clone();
+        return owner == null ? null : (Customer) owner.clone();
     }
 
     public void setOwner(Customer owner) throws CloneNotSupportedException {
@@ -106,6 +108,7 @@ public class Pet {
         this.notes = notes;
     }
 
+    // accessing owner here causes StackOverflowError due to circular dependency between Pet and Customer
     @Override
     public String toString() {
         return "Pet{" +
@@ -113,7 +116,7 @@ public class Pet {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", birthDate=" + birthDate +
-                ", owner=" + owner +
+                ", ownerId=" + (owner == null ? null : owner.getId()) +
 //                ", schedule=" + schedule +
                 ", notes='" + notes + '\'' +
                 '}';

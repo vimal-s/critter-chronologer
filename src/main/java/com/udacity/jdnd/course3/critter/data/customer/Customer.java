@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
-public class Customer {
+public class Customer implements Cloneable {
 
     @Id
     @GeneratedValue

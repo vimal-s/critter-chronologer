@@ -63,7 +63,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testAddPetsToCustomer() {
+    public void testAddPetsToCustomer() throws Throwable {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
@@ -88,7 +88,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testFindPetsByOwner() {
+    public void testFindPetsByOwner() throws Throwable {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
@@ -106,7 +106,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testFindOwnerByPet() {
+    public void testFindOwnerByPet() throws Throwable {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
 
@@ -170,7 +170,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void testSchedulePetsForServiceWithEmployee() {
+    public void testSchedulePetsForServiceWithEmployee() throws Throwable {
         EmployeeDTO employeeTemp = createEmployeeDTO();
         employeeTemp.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
         EmployeeDTO employeeDTO = userController.saveEmployee(employeeTemp);
@@ -290,7 +290,12 @@ public class CritterFunctionalTest {
                 .mapToObj(i -> createPetDTO())
                 .map(p -> {
                     p.setOwnerId(cust.getId());
-                    return petController.savePet(p).getId();
+                    try {
+                        return petController.savePet(p).getId();
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                        return null;
+                    }
                 }).collect(Collectors.toList());
         return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities));
     }

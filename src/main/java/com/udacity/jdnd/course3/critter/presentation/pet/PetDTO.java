@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.presentation.pet;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
@@ -7,10 +8,18 @@ import java.time.LocalDate;
  * to the database directly.
  */
 public class PetDTO {
+
     private long id;
+
+    @NotNull(message = "PetType is required")
     private PetType type;
+
     private String name;
+
+//    @NotNull(message = "Owner id is required")
     private long ownerId;
+
+    // todo: should I make this optional
     private LocalDate birthDate;
     private String notes;
 
@@ -60,5 +69,17 @@ public class PetDTO {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "PetDTO{" +
+                "id=" + id +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", ownerId=" + ownerId +
+                ", birthDate=" + birthDate +
+                ", notes='" + notes + '\'' +
+                '}';
     }
 }

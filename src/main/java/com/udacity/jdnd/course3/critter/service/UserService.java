@@ -32,6 +32,14 @@ public class UserService {
     return customerRepository.save(customer);
   }
 
+  public Customer getCustomer(Long id) throws Throwable {
+    logger.info("finding customer with id: " + id);
+    return customerRepository
+            .findById(id)
+            .orElseThrow(
+                    (Supplier<Throwable>) () -> new RuntimeException("Customer not found with id: " + id));
+    }
+
   public List<Customer> getAllCustomers() {
     logger.info("Retrieving all customers from database");
     return customerRepository.findAll();
