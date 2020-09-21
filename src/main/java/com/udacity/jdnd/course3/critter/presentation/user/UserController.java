@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
@@ -94,10 +95,10 @@ public class UserController {
   }
 
   @GetMapping("/employee/availability")
-  public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
+  public List<EmployeeDTO> findEmployeesForService(@Valid @RequestBody EmployeeRequestDTO employeeDTO) {
     logger.info("received from client: " + employeeDTO);
     return userService
-        .getEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate())
+        .getEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate().getDayOfWeek())
         .stream()
         .peek(employee -> logger.info("received from db: " + employee))
         .map(this::entityToDto)

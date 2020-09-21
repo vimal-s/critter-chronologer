@@ -5,15 +5,15 @@ import com.udacity.jdnd.course3.critter.data.customer.CustomerRepository;
 import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.employee.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -59,19 +59,16 @@ public class UserService {
     employeeRepository.save(employee);
   }
 
-  public List<Employee> getEmployeesForService(Set<EmployeeSkill> skills, LocalDate date) {
-    DayOfWeek day = date.getDayOfWeek();
-    // todo: replace this later
-    // find employees with given skill and dayOfWeek here or in the repository
-    logger.info("finding employees: " + date.toString() + " <- day -> " + day);
-    // todo: should only get employees if all their skills covers all the required skills
-    // at present even if one skill is matched the employee is added the list
+  public List<Employee> getEmployeesForService(
+      Set<EmployeeSkill> requiredSkills, DayOfWeek requiredDay) {
+    // todo: find employees with given skill and dayOfWeek here or in the repository
+    logger.info("finding employees available on: " + requiredDay);
+
     return employeeRepository.findAll().stream()
         .filter(
             employee ->
-                employee.getDaysAvailable().stream().anyMatch(dayOfWeek -> dayOfWeek.equals(day))
-                    && employee.getSkills().stream()
-                        .anyMatch(employeeSkill -> skills.stream().anyMatch(employeeSkill::equals)))
+                employee.getDaysAvailable().stream().anyMatch(day -> day.equals(requiredDay))
+                    && employee.getSkills().containsAll(requiredSkills))
         .collect(Collectors.toList());
   }
 }
