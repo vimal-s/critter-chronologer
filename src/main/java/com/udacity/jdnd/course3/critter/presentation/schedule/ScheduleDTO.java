@@ -10,64 +10,69 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Represents the form that schedule request and response data takes. Does not map
- * to the database directly.
+ * Represents the form that schedule request and response data takes. Does not map to the database
+ * directly.
  */
 public class ScheduleDTO {
-    private long id;
+  private long id;
 
-    @NotEmpty(message = "employeeIds are required")
-    private List<Long> employeeIds;
+  @NotNull(message = "date is required")
+  private LocalDate date;
 
-    @NotEmpty(message = "petIds are required")
-    private List<Long> petIds;
+  @NotEmpty(message = "employeeIds are required")
+  private List<Long> employeeIds;
 
-    @NotNull(message = "date is required")
-    private LocalDate date;
+  @NotEmpty(message = "petIds are required")
+  private List<Long> petIds;
 
-    private Set<EmployeeSkill> activities;
+  private Set<EmployeeSkill> activities;
 
-    public List<Long> getEmployeeIds() {
-//        return employeeIds;
-        return employeeIds == null ? null : Collections.unmodifiableList(employeeIds);
-    }
+  public List<Long> getEmployeeIds() {
+    // return employeeIds;
+    return employeeIds == null ? null : Collections.unmodifiableList(employeeIds);
+  }
 
-    public void setEmployeeIds(List<Long> employeeIds) {
-        this.employeeIds = employeeIds;
-    }
+  public void setEmployeeIds(List<Long> employeeIds) {
+    this.employeeIds = employeeIds;
+  }
 
-    public List<Long> getPetIds() {
-        return petIds;
-    }
+  public LocalDate getDate() {
+    return date;
+  }
 
-    public void setPetIds(List<Long> petIds) {
-        this.petIds = petIds;
-    }
+  public void setDate(LocalDate date) {
+    this.date = date;
+  }
 
-    public LocalDate getDate() {
-        return date;
-    }
+  public List<Long> getPetIds() {
+    return petIds;
+  }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+  public void setPetIds(List<Long> petIds) {
+    this.petIds = petIds;
+  }
 
-    public Set<EmployeeSkill> getActivities() {
-        return activities;
-    }
+  public Set<EmployeeSkill> getActivities() {
+    return activities;
+  }
 
-    public void setActivities(Set<EmployeeSkill> activities) {
-        this.activities = activities;
-    }
+  public void setActivities(Set<EmployeeSkill> activities) {
+    this.activities = activities;
+  }
 
-    @Override
-    public String toString() {
-        return "ScheduleDTO{" +
-                "id=" + id +
-                ", employeeIds=" + employeeIds +
-                ", petIds=" + petIds +
-                ", date=" + date +
-                ", activities=" + activities +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "ScheduleDTO{"
+        + "id="
+        + id
+        + ", date="
+        + date
+        + ", employeeIds="
+        + employeeIds
+        + ", petIds="
+        + petIds
+        + ", activities="
+        + activities
+        + '}';
+  }
 }

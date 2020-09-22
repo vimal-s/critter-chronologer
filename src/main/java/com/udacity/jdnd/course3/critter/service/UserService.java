@@ -35,10 +35,10 @@ public class UserService {
   public Customer getCustomer(Long id) throws Throwable {
     logger.info("finding customer with id: " + id);
     return customerRepository
-            .findById(id)
-            .orElseThrow(
-                    (Supplier<Throwable>) () -> new RuntimeException("Customer not found with id: " + id));
-    }
+        .findById(id)
+        .orElseThrow(
+            (Supplier<Throwable>) () -> new RuntimeException("Customer not found with id: " + id));
+  }
 
   public List<Customer> getAllCustomers() {
     logger.info("Retrieving all customers from database");
@@ -48,6 +48,10 @@ public class UserService {
   public Employee save(Employee employee) {
     logger.info("Saving to database: " + employee);
     return employeeRepository.save(employee);
+  }
+
+  public boolean exists(Long employeeId) {
+    return employeeRepository.existsById(employeeId);
   }
 
   public Employee getEmployee(Long id) throws Throwable {
@@ -78,9 +82,5 @@ public class UserService {
                 employee.getDaysAvailable().stream().anyMatch(day -> day.equals(requiredDay))
                     && employee.getSkills().containsAll(requiredSkills))
         .collect(Collectors.toList());
-  }
-
-  public boolean exists(Long employeeId) {
-    return employeeRepository.existsById(employeeId);
   }
 }

@@ -4,83 +4,92 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
- * Represents the form that pet request and response data takes. Does not map
- * to the database directly.
+ * Represents the form that pet request and response data takes. Does not map to the database
+ * directly.
  */
 public class PetDTO {
 
-    private long id;
+  private long id;
 
-    @NotNull(message = "PetType is required")
-    private PetType type;
+  @NotNull(message = "PetType is required")
+  private PetType type;
 
-    private String name;
+  private String name;
 
-    // todo: should I enforce owner
-//    @NotNull(message = "Owner id is required")
-    private long ownerId;
+  // todo: should I enforce owner
+  // @NotNull(message = "Owner id is required")
+  private long ownerId;
 
-    // todo: should I make this optional
-    private LocalDate birthDate;
-    private String notes;
+  // todo: should I make this optional
+  private LocalDate birthDate;
 
-    public PetType getType() {
-        return type;
-    }
+  private String notes;
 
-    public void setType(PetType type) {
-        this.type = type;
-    }
+  public PetType getType() {
+    return type;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setType(PetType type) {
+    this.type = type;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public long getOwnerId() {
-        return ownerId;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setOwnerId(long ownerId) {
-        this.ownerId = ownerId;
-    }
+  public long getOwnerId() {
+    return ownerId;
+  }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
+  public void setOwnerId(long ownerId) {
+    this.ownerId = ownerId;
+  }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
+  public LocalDate getBirthDate() {
+    return birthDate;
+  }
 
-    public String getNotes() {
-        return notes;
-    }
+  public void setBirthDate(LocalDate birthDate) {
+    this.birthDate = birthDate;
+  }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
+  public String getNotes() {
+    return notes;
+  }
 
-    public long getId() {
-        return id;
-    }
+  public void setNotes(String notes) {
+    this.notes = notes;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public long getId() {
+    return id;
+  }
 
-    @Override
-    public String toString() {
-        return "PetDTO{" +
-                "id=" + id +
-                ", type=" + type +
-                ", name='" + name + '\'' +
-                ", ownerId=" + ownerId +
-                ", birthDate=" + birthDate +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  @Override
+  public String toString() {
+    return "PetDTO{"
+        + "id="
+        + id
+        + ", type="
+        + type
+        + ", name='"
+        + name
+        + '\''
+        + ", ownerId="
+        + ownerId
+        + ", birthDate="
+        + birthDate
+        + ", notes='"
+        + notes
+        + '\''
+        + '}';
+  }
 }

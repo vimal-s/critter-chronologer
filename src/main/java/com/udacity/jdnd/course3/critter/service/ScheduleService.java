@@ -2,12 +2,12 @@ package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -17,7 +17,8 @@ public class ScheduleService {
   private final PetService petService;
   private final UserService userService;
 
-  public ScheduleService(ScheduleRepository scheduleRepository, PetService petService, UserService userService) {
+  public ScheduleService(
+      ScheduleRepository scheduleRepository, PetService petService, UserService userService) {
     this.scheduleRepository = scheduleRepository;
     this.petService = petService;
     this.userService = userService;
@@ -28,17 +29,23 @@ public class ScheduleService {
   public Schedule create(Schedule schedule) {
     logger.info("Saving to db: " + schedule);
 
-    schedule.getPetIds().forEach(petId -> {
-      if (!petService.exists(petId)) {
-        throw new RuntimeException("Pet not found with id: " + petId);
-      }
-    });
+    schedule
+        .getPetIds()
+        .forEach(
+            petId -> {
+              if (!petService.exists(petId)) {
+                throw new RuntimeException("Pet not found with id: " + petId);
+              }
+            });
 
-    schedule.getEmployeeIds().forEach(employeeId -> {
-      if (!userService.exists(employeeId)) {
-        throw new RuntimeException("Employee not found with id: " + employeeId);
-      }
-    });
+    schedule
+        .getEmployeeIds()
+        .forEach(
+            employeeId -> {
+              if (!userService.exists(employeeId)) {
+                throw new RuntimeException("Employee not found with id: " + employeeId);
+              }
+            });
 
     return scheduleRepository.save(schedule);
   }

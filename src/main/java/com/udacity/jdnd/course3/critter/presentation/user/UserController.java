@@ -97,7 +97,8 @@ public class UserController {
   }
 
   @GetMapping("/employee/availability")
-  public List<EmployeeDTO> findEmployeesForService(@Valid @RequestBody EmployeeRequestDTO employeeDTO) {
+  public List<EmployeeDTO> findEmployeesForService(
+      @Valid @RequestBody EmployeeRequestDTO employeeDTO) {
     logger.info("received from client: " + employeeDTO);
     return userService
         .getEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate().getDayOfWeek())

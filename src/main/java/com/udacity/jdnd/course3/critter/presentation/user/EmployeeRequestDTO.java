@@ -12,24 +12,24 @@ import java.util.Set;
  */
 public class EmployeeRequestDTO {
 
-    private Set<EmployeeSkill> skills;
+  @NotNull(message = "date is required")
+  private LocalDate date;
 
-    @NotNull(message = "date is required")
-    private LocalDate date;
+  private Set<EmployeeSkill> skills;
 
-    public Set<EmployeeSkill> getSkills() {
-        return skills == null ? Collections.emptySet() : Collections.unmodifiableSet(skills);
-    }
+  public LocalDate getDate() {
+    return date;
+  }
 
-    public void setSkills(Set<EmployeeSkill> skills) {
-        this.skills = skills == null ? Collections.emptySet() : new HashSet<>(skills);
-    }
+  public void setDate(LocalDate date) {
+    this.date = date;
+  }
 
-    public LocalDate getDate() {
-        return date;
-    }
+  public Set<EmployeeSkill> getSkills() {
+    return skills == null ? Collections.emptySet() : Collections.unmodifiableSet(skills);
+  }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+  public void setSkills(Set<EmployeeSkill> skills) {
+    this.skills = skills == null ? Collections.emptySet() : new HashSet<>(skills);
+  }
 }

@@ -3,13 +3,13 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.pet.PetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PetService {
@@ -43,6 +43,10 @@ public class PetService {
     return pet;
   }
 
+  public boolean exists(Long petId) {
+    return petRepository.existsById(petId);
+  }
+
   public Pet getPet(Long id) throws Throwable {
     logger.info("Retrieving from db pet with id: " + id);
     return petRepository
@@ -64,11 +68,7 @@ public class PetService {
   public Customer getOwnerByPet(Long id) throws Throwable {
     logger.info("Retrieving owner with pet id: " + id);
     // todo: I can throw exception here
-//    assert getPet(id).getOwner() != null; todo: how to use assert statements
+    // assert getPet(id).getOwner() != null; todo: how to use assert statements
     return getPet(id).getOwner();
-  }
-
-  public boolean exists(Long petId) {
-    return petRepository.existsById(petId);
   }
 }
