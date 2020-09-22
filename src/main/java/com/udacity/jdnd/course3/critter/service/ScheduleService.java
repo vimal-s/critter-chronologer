@@ -24,6 +24,7 @@ public class ScheduleService {
   }
 
   // todo: how can I combine the two checks
+  // suggestion: avoid creating schedule for pet with no owner
   public Schedule create(Schedule schedule) {
     logger.info("Saving to db: " + schedule);
 
@@ -57,6 +58,7 @@ public class ScheduleService {
     return scheduleRepository.findByPetIds(id);
   }
 
+  // todo: look for better alternative here
   public List<Schedule> getAllByOwner(Long id) {
     logger.info("Finding by owner with id: " + id);
     return getAllSchedules().stream()
@@ -68,8 +70,8 @@ public class ScheduleService {
                           try {
                             return petService.getOwnerByPet(aLong).getId().equals(id);
                           } catch (Throwable throwable) {
-                            throwable.printStackTrace();
-                            throw new RuntimeException("wrong implementation");
+                            logger.info(throwable.getMessage());
+                            return false;
                           }
                         }))
         .collect(Collectors.toList());

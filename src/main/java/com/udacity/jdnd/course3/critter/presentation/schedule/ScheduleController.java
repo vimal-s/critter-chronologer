@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Schedules.
@@ -51,21 +52,32 @@ public class ScheduleController {
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getAllSchedules();
+        return dtoListFrom(schedules);
     }
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getAllByPet(petId);
+        return dtoListFrom(schedules);
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getAllByEmployee(employeeId);
+        return dtoListFrom(schedules);
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getAllByOwner(customerId);
+        return dtoListFrom(schedules);
+    }
+
+    private List<ScheduleDTO> dtoListFrom(List<Schedule> schedules) {
+        return schedules.stream()
+                .peek(schedule -> logger.info("received from db: " + schedule))
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
     }
 }

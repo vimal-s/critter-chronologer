@@ -14,6 +14,7 @@ import javax.persistence.Id;
 @Entity
 public class Schedule {
 
+    // todo: change the generation strategy
     @Id
     @GeneratedValue
     private Long id;
