@@ -16,6 +16,7 @@ public class PetDTO {
 
     private String name;
 
+    // todo: should I enforce owner
 //    @NotNull(message = "Owner id is required")
     private long ownerId;
 

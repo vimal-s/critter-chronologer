@@ -82,6 +82,7 @@ public class CritterFunctionalTest {
         Assertions.assertEquals(newPet.getName(), pets.get(0).getName());
 
         //check to make sure customer now also contains pet
+        // todo: test fails here but runs successfully with postman
         CustomerDTO retrievedCustomer = userController.getAllCustomers().get(0);
         Assertions.assertTrue(retrievedCustomer.getPetIds() != null && retrievedCustomer.getPetIds().size() > 0);
         Assertions.assertEquals(retrievedCustomer.getPetIds().get(0), retrievedPet.getId());
@@ -123,7 +124,7 @@ public class CritterFunctionalTest {
     public void testChangeEmployeeAvailability() throws Throwable {
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO emp1 = userController.saveEmployee(employeeDTO);
-        Assertions.assertNull(emp1.getDaysAvailable());
+        Assertions.assertTrue(emp1.getDaysAvailable().isEmpty());
 
         Set<DayOfWeek> availability = Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY);
         userController.setAvailability(availability, emp1.getId());
@@ -189,8 +190,9 @@ public class CritterFunctionalTest {
 
         Assertions.assertEquals(scheduleDTO.getActivities(), skillSet);
         Assertions.assertEquals(scheduleDTO.getDate(), date);
-        Assertions.assertEquals(scheduleDTO.getEmployeeIds(), employeeList);
-        Assertions.assertEquals(scheduleDTO.getPetIds(), petList);
+        // todo: hibernate persistent bag vs java arraylist
+        Assertions.assertArrayEquals(scheduleDTO.getEmployeeIds().toArray(), employeeList.toArray());
+        Assertions.assertArrayEquals(scheduleDTO.getPetIds().toArray(), petList.toArray());
     }
 
     @Test
@@ -226,6 +228,7 @@ public class CritterFunctionalTest {
         compareSchedules(sched1, scheds1p.get(0));
 
         //Pet from schedule 2 is in both schedules 2 and 3
+        // todo: why no error here?
         List<ScheduleDTO> scheds2p = scheduleController.getScheduleForPet(sched2.getPetIds().get(0));
         compareSchedules(sched2, scheds2p.get(0));
         compareSchedules(sched3, scheds2p.get(1));
@@ -247,6 +250,7 @@ public class CritterFunctionalTest {
         employeeDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
         return employeeDTO;
     }
+
     private static CustomerDTO createCustomerDTO() {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setName("TestEmployee");
@@ -301,10 +305,10 @@ public class CritterFunctionalTest {
     }
 
     private static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
-        Assertions.assertEquals(sched1.getPetIds(), sched2.getPetIds());
+        Assertions.assertArrayEquals(sched1.getPetIds().toArray(), sched2.getPetIds().toArray());
+        // todo: debug if activity objects are same or different here
         Assertions.assertEquals(sched1.getActivities(), sched2.getActivities());
-        Assertions.assertEquals(sched1.getEmployeeIds(), sched2.getEmployeeIds());
+        Assertions.assertArrayEquals(sched1.getEmployeeIds().toArray(), sched2.getEmployeeIds().toArray());
         Assertions.assertEquals(sched1.getDate(), sched2.getDate());
     }
-
 }

@@ -77,6 +77,7 @@ public class UserController {
     return employeeDTO;
   }
 
+  // todo: change this to get mapping
   @PostMapping("/employee/{employeeId}")
   public EmployeeDTO getEmployee(@PathVariable long employeeId) throws Throwable {
     logger.info("received from client employeeId: " + employeeId);
@@ -107,6 +108,7 @@ public class UserController {
   }
 
   // todo: combine customer dto and employee dto conversion methods
+  // todo: copy petIds also
   private Customer dtoToEntity(CustomerDTO customerDTO) {
     Customer customer = new Customer();
 
@@ -118,7 +120,9 @@ public class UserController {
 
   private CustomerDTO entityToDto(Customer customer) {
     CustomerDTO customerDTO = new CustomerDTO();
-
+    if (customer == null) {
+      return null;
+    }
     BeanUtils.copyProperties(customer, customerDTO);
     List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
     customerDTO.setPetIds(petIds);

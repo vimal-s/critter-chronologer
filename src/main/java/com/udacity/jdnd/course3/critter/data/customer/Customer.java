@@ -70,6 +70,7 @@ public class Customer implements Cloneable {
         this.phoneNumber = phoneNumber;
     }
 
+    // todo: null check here
     public List<Pet> getPets() {
         return pets == null ? Collections.emptyList() : Collections.unmodifiableList(pets);
     }

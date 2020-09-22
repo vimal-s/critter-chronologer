@@ -3,6 +3,8 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.pet.PetRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
@@ -14,14 +16,31 @@ public class PetService {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final PetRepository petRepository;
+  private final UserService userService;
 
-  public PetService(PetRepository petRepository) {
+  public PetService(PetRepository petRepository, UserService userService) {
     this.petRepository = petRepository;
+    this.userService = userService;
   }
 
-  public Pet save(Pet pet) {
+  public Pet save(Pet pet) throws CloneNotSupportedException {
     logger.info("Saving to database: " + pet);
-    return petRepository.save(pet);
+
+    pet = petRepository.save(pet);
+
+    // without this testing from spring fails
+    Customer owner = pet.getOwner();
+    List<Pet> pets = owner.getPets();
+    if (pets == null) {
+      pets = new ArrayList<>();
+    } else {
+      pets = new ArrayList<>(pets);
+    }
+    pets.add(pet);
+    owner.setPets(pets);
+    userService.save(owner);
+
+    return pet;
   }
 
   public Pet getPet(Long id) throws Throwable {

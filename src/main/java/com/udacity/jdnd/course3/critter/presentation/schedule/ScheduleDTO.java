@@ -5,6 +5,7 @@ import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,8 @@ public class ScheduleDTO {
     private Set<EmployeeSkill> activities;
 
     public List<Long> getEmployeeIds() {
-        return employeeIds;
+//        return employeeIds;
+        return employeeIds == null ? null : Collections.unmodifiableList(employeeIds);
     }
 
     public void setEmployeeIds(List<Long> employeeIds) {

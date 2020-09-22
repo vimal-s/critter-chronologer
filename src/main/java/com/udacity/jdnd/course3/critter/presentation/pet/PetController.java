@@ -82,6 +82,7 @@ public class PetController {
         return petsToPetDTOS(pets);
     }
 
+    // todo: test this
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
         logger.info("received from client: " + ownerId);
