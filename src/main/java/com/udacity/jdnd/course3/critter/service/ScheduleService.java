@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,14 +15,31 @@ public class ScheduleService {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final ScheduleRepository scheduleRepository;
   private final PetService petService;
+  private final UserService userService;
 
-  public ScheduleService(ScheduleRepository scheduleRepository, PetService petService) {
+  public ScheduleService(ScheduleRepository scheduleRepository, PetService petService, UserService userService) {
     this.scheduleRepository = scheduleRepository;
     this.petService = petService;
+    this.userService = userService;
   }
 
+  // todo: how can I combine the two checks
+  // suggestion: avoid creating schedule for pet with no owner
   public Schedule create(Schedule schedule) {
     logger.info("Saving to db: " + schedule);
+
+    schedule.getPetIds().forEach(petId -> {
+      if (!petService.exists(petId)) {
+        throw new RuntimeException("Pet not found with id: " + petId);
+      }
+    });
+
+    schedule.getEmployeeIds().forEach(employeeId -> {
+      if (!userService.exists(employeeId)) {
+        throw new RuntimeException("Employee not found with id: " + employeeId);
+      }
+    });
+
     return scheduleRepository.save(schedule);
   }
 
@@ -40,6 +58,7 @@ public class ScheduleService {
     return scheduleRepository.findByPetIds(id);
   }
 
+  // todo: look for better alternative here
   public List<Schedule> getAllByOwner(Long id) {
     logger.info("Finding by owner with id: " + id);
     return getAllSchedules().stream()
@@ -51,8 +70,8 @@ public class ScheduleService {
                           try {
                             return petService.getOwnerByPet(aLong).getId().equals(id);
                           } catch (Throwable throwable) {
-                            throwable.printStackTrace();
-                            throw new RuntimeException("wrong implementation");
+                            logger.info(throwable.getMessage());
+                            return false;
                           }
                         }))
         .collect(Collectors.toList());

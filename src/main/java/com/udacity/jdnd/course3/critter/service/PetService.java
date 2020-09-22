@@ -44,6 +44,12 @@ public class PetService {
 
   public Customer getOwnerByPet(Long id) throws Throwable {
     logger.info("Retrieving owner with pet id: " + id);
+    // todo: I can throw exception here
+//    assert getPet(id).getOwner() != null; todo: how to use assert statements
     return getPet(id).getOwner();
+  }
+
+  public boolean exists(Long petId) {
+    return petRepository.existsById(petId);
   }
 }

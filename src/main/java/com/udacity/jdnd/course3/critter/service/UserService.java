@@ -79,4 +79,8 @@ public class UserService {
                     && employee.getSkills().containsAll(requiredSkills))
         .collect(Collectors.toList());
   }
+
+  public boolean exists(Long employeeId) {
+    return employeeRepository.existsById(employeeId);
+  }
 }

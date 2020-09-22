@@ -14,6 +14,7 @@ import javax.persistence.Id;
 @Entity
 public class Schedule {
 
+    // todo: change the generation strategy
     @Id
     @GeneratedValue
     private Long id;
@@ -29,7 +30,6 @@ public class Schedule {
     //    @OneToMany(mappedBy = "schedule")
     @ElementCollection
     private List<Long> petIds;
-
 
     @ElementCollection
     private Set<EmployeeSkill> activities;

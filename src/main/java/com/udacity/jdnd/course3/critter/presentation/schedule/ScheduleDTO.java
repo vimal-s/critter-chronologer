@@ -2,6 +2,8 @@ package com.udacity.jdnd.course3.critter.presentation.schedule;
 
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -12,9 +14,16 @@ import java.util.Set;
  */
 public class ScheduleDTO {
     private long id;
+
+    @NotEmpty(message = "employeeIds are required")
     private List<Long> employeeIds;
+
+    @NotEmpty(message = "petIds are required")
     private List<Long> petIds;
+
+    @NotNull(message = "date is required")
     private LocalDate date;
+
     private Set<EmployeeSkill> activities;
 
     public List<Long> getEmployeeIds() {
@@ -47,5 +56,16 @@ public class ScheduleDTO {
 
     public void setActivities(Set<EmployeeSkill> activities) {
         this.activities = activities;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleDTO{" +
+                "id=" + id +
+                ", employeeIds=" + employeeIds +
+                ", petIds=" + petIds +
+                ", date=" + date +
+                ", activities=" + activities +
+                '}';
     }
 }
