@@ -59,11 +59,11 @@ public class Pet {
   }
 
   public LocalDate getBirthDate() {
-    return birthDate == null ? null : LocalDate.from(birthDate);
+    return birthDate;
   }
 
   public void setBirthDate(LocalDate birthDate) {
-    this.birthDate = LocalDate.from(birthDate);
+    this.birthDate = birthDate;
   }
 
   public String getNotes() {

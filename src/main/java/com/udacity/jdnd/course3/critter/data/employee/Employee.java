@@ -5,6 +5,7 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class Employee {
   }
 
   public void setSkills(Set<EmployeeSkill> skills) {
-    this.skills = skills == null ? Collections.emptySet() : new HashSet<>(skills);
+    this.skills = skills == null ? null : new HashSet<>(skills);
   }
 
   public Set<DayOfWeek> getDaysAvailable() {
@@ -52,7 +53,7 @@ public class Employee {
 
   public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
     this.daysAvailable =
-        daysAvailable == null ? Collections.emptySet() : new HashSet<>(daysAvailable);
+        daysAvailable == null ? null : new HashSet<>(daysAvailable);
   }
 
   @Override
@@ -64,9 +65,9 @@ public class Employee {
         + name
         + '\''
         + ", skills="
-        + skills
+        + Arrays.toString(getSkills().toArray())
         + ", daysAvailable="
-        + daysAvailable
+        + Arrays.toString(getDaysAvailable().toArray())
         +
         '}';
   }

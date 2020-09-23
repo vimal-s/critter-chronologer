@@ -4,10 +4,7 @@ import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Schedule {
@@ -31,35 +28,35 @@ public class Schedule {
   }
 
   public LocalDate getDate() {
-    return LocalDate.from(date);
+    return date;
   }
 
   public void setDate(LocalDate date) {
-    this.date = LocalDate.from(date);
+    this.date = date;
   }
 
   public List<Long> getEmployeeIds() {
-    return employeeIds;
+    return employeeIds == null ? Collections.emptyList() : Collections.unmodifiableList(employeeIds);
   }
 
   public void setEmployeeIds(List<Long> employeeIds) {
-    this.employeeIds = employeeIds;
+    this.employeeIds = employeeIds == null ? null : new ArrayList<>(employeeIds);
   }
 
   public List<Long> getPetIds() {
-    return Collections.unmodifiableList(petIds);
+    return petIds == null ? Collections.emptyList() : Collections.unmodifiableList(petIds);
   }
 
   public void setPetIds(List<Long> petIds) {
-    this.petIds = new ArrayList<>(petIds);
+    this.petIds = petIds == null ? null : new ArrayList<>(petIds);
   }
 
   public Set<EmployeeSkill> getActivities() {
-    return activities;
+    return activities == null ? Collections.emptySet() : Collections.unmodifiableSet(activities);
   }
 
   public void setActivities(Set<EmployeeSkill> activities) {
-    this.activities = activities;
+    this.activities = activities == null ? null : new HashSet<>(activities);
   }
 
   @Override
@@ -70,11 +67,11 @@ public class Schedule {
         + ", date="
         + date
         + ", employeeIds="
-        + employeeIds
+        + Arrays.toString(getEmployeeIds().toArray())
         + ", petIds="
-        + petIds
+        + Arrays.toString(getPetIds().toArray())
         + ", activities="
-        + activities
+        + Arrays.toString(getActivities().toArray())
         + '}';
   }
 }
