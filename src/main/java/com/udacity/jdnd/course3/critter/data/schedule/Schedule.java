@@ -2,10 +2,7 @@ package com.udacity.jdnd.course3.critter.data.schedule;
 
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +12,7 @@ import java.util.Set;
 @Entity
 public class Schedule {
 
-  // todo: change the generation strategy
-  @Id @GeneratedValue private Long id;
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
   private LocalDate date;
 

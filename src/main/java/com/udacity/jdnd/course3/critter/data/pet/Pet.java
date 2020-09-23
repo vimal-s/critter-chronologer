@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 public class Pet {
 
-  @Id @GeneratedValue private Long id;
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
   private PetType type;
 

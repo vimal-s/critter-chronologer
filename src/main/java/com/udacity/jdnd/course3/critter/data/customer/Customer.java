@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import org.hibernate.annotations.Nationalized;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.List;
 @Entity
 public class Customer implements Cloneable {
 
-  @Id @GeneratedValue private Long id;
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
   @Nationalized private String name;
 

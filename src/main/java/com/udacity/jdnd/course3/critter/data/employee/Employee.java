@@ -3,10 +3,7 @@ package com.udacity.jdnd.course3.critter.data.employee;
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 import org.hibernate.annotations.Nationalized;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,7 +12,7 @@ import java.util.Set;
 @Entity
 public class Employee {
 
-  @Id @GeneratedValue private Long id;
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
   @Nationalized private String name;
 
