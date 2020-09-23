@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.presentation.user;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,10 +27,18 @@ public class EmployeeRequestDTO {
   }
 
   public Set<EmployeeSkill> getSkills() {
-    return skills == null ? Collections.emptySet() : Collections.unmodifiableSet(skills);
+    return skills;
   }
 
   public void setSkills(Set<EmployeeSkill> skills) {
-    this.skills = skills == null ? Collections.emptySet() : new HashSet<>(skills);
+    this.skills = skills;
+  }
+
+  @Override
+  public String toString() {
+    return "EmployeeRequestDTO{" +
+            "date=" + date +
+            ", skills=" + (skills == null ? null : Arrays.toString(skills.toArray())) +
+            '}';
   }
 }

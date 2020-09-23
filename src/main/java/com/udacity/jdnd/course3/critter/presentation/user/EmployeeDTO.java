@@ -1,6 +1,8 @@
 package com.udacity.jdnd.course3.critter.presentation.user;
 
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -11,8 +13,13 @@ import java.util.Set;
 public class EmployeeDTO {
 
   private long id;
+
+  @NotNull(message = "Employee name is required")
   private String name;
+
+  @NotNull(message = "skills are required")
   private Set<EmployeeSkill> skills;
+
   private Set<DayOfWeek> daysAvailable;
 
   public long getId() {
@@ -56,9 +63,9 @@ public class EmployeeDTO {
         + name
         + '\''
         + ", skills="
-        + skills
+        + (skills == null ? null : Arrays.toString(skills.toArray()))
         + ", daysAvailable="
-        + daysAvailable
+        + (daysAvailable == null ? null : Arrays.toString(daysAvailable.toArray()))
         + '}';
   }
 }

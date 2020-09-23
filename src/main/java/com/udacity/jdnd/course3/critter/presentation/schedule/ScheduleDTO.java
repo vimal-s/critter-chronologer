@@ -5,15 +5,14 @@ import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents the form that schedule request and response data takes. Does not map to the database
  * directly.
  */
 public class ScheduleDTO {
+
   private long id;
 
   @NotNull(message = "date is required")
@@ -28,8 +27,7 @@ public class ScheduleDTO {
   private Set<EmployeeSkill> activities;
 
   public List<Long> getEmployeeIds() {
-    // return employeeIds;
-    return employeeIds == null ? null : Collections.unmodifiableList(employeeIds);
+    return employeeIds;
   }
 
   public void setEmployeeIds(List<Long> employeeIds) {
@@ -68,11 +66,11 @@ public class ScheduleDTO {
         + ", date="
         + date
         + ", employeeIds="
-        + employeeIds
+        + (employeeIds == null ? null : Arrays.toString(employeeIds.toArray()))
         + ", petIds="
-        + petIds
+        + (petIds == null ? null : Arrays.toString(petIds.toArray()))
         + ", activities="
-        + activities
+        + (activities == null ? null : Arrays.toString(activities.toArray()))
         + '}';
   }
 }

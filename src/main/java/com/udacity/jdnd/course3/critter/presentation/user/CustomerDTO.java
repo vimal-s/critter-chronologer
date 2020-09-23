@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.presentation.user;
 
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -9,9 +11,15 @@ import java.util.List;
 public class CustomerDTO {
 
   private long id;
+
+  @NotNull(message = "Customer name is required")
   private String name;
+
+  @NotNull(message = "Phone number is required")
   private String phoneNumber;
+
   private List<Long> petIds;
+
   private String notes;
 
   public long getId() {
@@ -66,7 +74,7 @@ public class CustomerDTO {
         + phoneNumber
         + '\''
         + ", petIds="
-        + petIds
+        + (petIds == null ? null : Arrays.toString(petIds.toArray()))
         + ", notes='"
         + notes
         + '\''
