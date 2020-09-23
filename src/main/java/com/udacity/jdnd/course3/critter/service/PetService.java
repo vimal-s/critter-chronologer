@@ -28,16 +28,9 @@ public class PetService {
 
     pet = petRepository.save(pet);
 
-    // without this testing from spring fails
+    // without this testing from spring fails, ok through postman
     Customer owner = pet.getOwner();
-    List<Pet> pets = owner.getPets();
-    if (pets == null) {
-      pets = new ArrayList<>();
-    } else {
-      pets = new ArrayList<>(pets);
-    }
-    pets.add(pet);
-    owner.setPets(pets);
+    owner.addPet(pet);
     userService.save(owner);
 
     return pet;

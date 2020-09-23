@@ -6,6 +6,7 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Customer implements Cloneable {
 
   private String phoneNumber;
 
+  // todo: details about this annotation
   @JsonManagedReference
   @OneToMany(mappedBy = "owner")
   private List<Pet> pets;
@@ -25,15 +27,6 @@ public class Customer implements Cloneable {
   @Nationalized private String notes;
 
   public Customer() {}
-
-  // remove this constructor later
-  public Customer(Long id, String name, String phoneNumber, List<Pet> pets, String notes) {
-    this.id = id;
-    this.name = name;
-    this.phoneNumber = phoneNumber;
-    this.pets = new ArrayList<>(pets);
-    this.notes = notes;
-  }
 
   public Long getId() {
     return id;
@@ -59,13 +52,19 @@ public class Customer implements Cloneable {
     this.phoneNumber = phoneNumber;
   }
 
-  // todo: null check here
   public List<Pet> getPets() {
     return pets == null ? Collections.emptyList() : Collections.unmodifiableList(pets);
   }
 
   public void setPets(List<Pet> pets) {
-    this.pets = new ArrayList<>(pets);
+    this.pets = pets == null ? null : new ArrayList<>(pets);
+  }
+
+  public boolean addPet(Pet pet) {
+    if (pets == null) {
+      pets = new ArrayList<>();
+    }
+    return pets.add(pet);
   }
 
   public String getNotes() {
@@ -88,7 +87,7 @@ public class Customer implements Cloneable {
         + phoneNumber
         + '\''
         + ", pets="
-        + pets
+        + Arrays.toString(getPets().toArray())
         + ", notes='"
         + notes
         + '\''
@@ -98,6 +97,14 @@ public class Customer implements Cloneable {
   @Override
   public Object clone() throws CloneNotSupportedException {
     super.clone();
-    return new Customer(getId(), getName(), getPhoneNumber(), getPets(), getNotes());
+
+    Customer customer = new Customer();
+    customer.setId(getId());
+    customer.setName(getName());
+    customer.setPhoneNumber(getPhoneNumber());
+    customer.setPets(getPets());
+    customer.setNotes(getNotes());
+
+    return customer;
   }
 }
