@@ -6,10 +6,7 @@ import com.udacity.jdnd.course3.critter.presentation.pet.PetController;
 import com.udacity.jdnd.course3.critter.presentation.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.presentation.schedule.ScheduleController;
 import com.udacity.jdnd.course3.critter.presentation.schedule.ScheduleDTO;
-import com.udacity.jdnd.course3.critter.presentation.user.CustomerDTO;
-import com.udacity.jdnd.course3.critter.presentation.user.EmployeeDTO;
-import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
-import com.udacity.jdnd.course3.critter.presentation.user.UserController;
+import com.udacity.jdnd.course3.critter.presentation.user.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +20,27 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.udacity.jdnd.course3.critter.Helper.*;
+import static com.udacity.jdnd.course3.critter.HelperClass.*;
 
 @Transactional
 @SpringBootTest(classes = CritterApplication.class)
 public class ScheduleTests {
 
-  @Autowired private ScheduleController scheduleController;
-
-  @Autowired private UserController userController;
+  @Autowired private CustomerController customerController;
 
   @Autowired private PetController petController;
+
+  @Autowired private EmployeeController employeeController;
+
+  @Autowired private ScheduleController scheduleController;
 
   @Test
   public void testSchedulePetsForServiceWithEmployee() throws Throwable {
     EmployeeDTO employeeTemp = createEmployeeDTO();
     employeeTemp.setDaysAvailable(
         Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
-    EmployeeDTO employeeDTO = userController.saveEmployee(employeeTemp);
-    CustomerDTO customerDTO = userController.saveCustomer(createCustomerDTO());
+    EmployeeDTO employeeDTO = employeeController.saveEmployee(employeeTemp);
+    CustomerDTO customerDTO = customerController.saveCustomer(createCustomerDTO());
     PetDTO petTemp = createPetDTO();
     petTemp.setOwnerId(customerDTO.getId());
     PetDTO petDTO = petController.savePet(petTemp);
@@ -110,13 +109,13 @@ public class ScheduleTests {
     // Owner of the first pet will only be in schedule 1
     List<ScheduleDTO> scheds1c =
         scheduleController.getScheduleForCustomer(
-            userController.getOwnerByPet(sched1.getPetIds().get(0)).getId());
+            customerController.getOwnerByPet(sched1.getPetIds().get(0)).getId());
     compareSchedules(sched1, scheds1c.get(0));
 
     // Owner of pet from schedule 2 will be in both schedules 2 and 3
     List<ScheduleDTO> scheds2c =
         scheduleController.getScheduleForCustomer(
-            userController.getOwnerByPet(sched2.getPetIds().get(0)).getId());
+            customerController.getOwnerByPet(sched2.getPetIds().get(0)).getId());
     compareSchedules(sched2, scheds2c.get(0));
     compareSchedules(sched3, scheds2c.get(1));
   }
@@ -130,10 +129,10 @@ public class ScheduleTests {
                 e -> {
                   e.setSkills(activities);
                   e.setDaysAvailable(Sets.newHashSet(date.getDayOfWeek()));
-                  return userController.saveEmployee(e).getId();
+                  return employeeController.saveEmployee(e).getId();
                 })
             .collect(Collectors.toList());
-    CustomerDTO cust = userController.saveCustomer(createCustomerDTO());
+    CustomerDTO cust = customerController.saveCustomer(createCustomerDTO());
     List<Long> petIds =
         IntStream.range(0, numPets)
             .mapToObj(i -> createPetDTO())

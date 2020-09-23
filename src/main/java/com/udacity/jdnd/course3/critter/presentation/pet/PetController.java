@@ -31,11 +31,11 @@ public class PetController {
   public PetDTO savePet(@Valid @RequestBody PetDTO petDTO) throws Throwable {
     logger.info("received from client: " + petDTO);
 
-    Pet pet = dtoToEntity(petDTO);
+    Pet pet = entityFrom(petDTO);
     pet = petService.save(pet);
     logger.info("received from db: " + pet);
 
-    return entityToDTO(pet);
+    return dtoFrom(pet);
   }
 
   @GetMapping("/{petId}")
@@ -45,13 +45,13 @@ public class PetController {
     Pet pet = petService.getPet(petId);
     logger.info("received from db: " + pet);
 
-    return entityToDTO(pet);
+    return dtoFrom(pet);
   }
 
   @GetMapping
   public List<PetDTO> getPets() {
     List<Pet> pets = petService.getAllPets();
-    return petsToPetDTOS(pets);
+    return dtoListFrom(pets);
   }
 
   // todo: test this
@@ -61,25 +61,23 @@ public class PetController {
 
     List<Pet> pets = petService.getPetsByOwner(ownerId);
 
-    return petsToPetDTOS(pets);
+    return dtoListFrom(pets);
   }
 
-  private List<PetDTO> petsToPetDTOS(List<Pet> pets) {
-    return pets.stream()
-        .peek(pet -> logger.info("received from db: " + pet))
-        .map(
-            pet -> {
-              try {
-                return entityToDTO(pet);
-              } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                return null;
-              }
-            })
-        .collect(Collectors.toList());
+  private Pet entityFrom(PetDTO petDTO) throws Throwable {
+    Pet pet = new Pet();
+
+    BeanUtils.copyProperties(petDTO, pet, petDTO.getBirthDate() == null ? "birthDate" : "");
+    if (petDTO.getOwnerId() != 0) {
+      Customer owner = userService.getCustomer(petDTO.getOwnerId());
+      pet.setOwner(owner);
+    }
+    logger.info("changed to entity: " + pet);
+
+    return pet;
   }
 
-  private PetDTO entityToDTO(Pet pet) throws CloneNotSupportedException {
+  private PetDTO dtoFrom(Pet pet) throws CloneNotSupportedException {
     PetDTO petDTO = new PetDTO();
 
     BeanUtils.copyProperties(pet, petDTO, pet.getBirthDate() == null ? "birthDate" : "");
@@ -91,16 +89,18 @@ public class PetController {
     return petDTO;
   }
 
-  private Pet dtoToEntity(PetDTO petDTO) throws Throwable {
-    Pet pet = new Pet();
-
-    BeanUtils.copyProperties(petDTO, pet, petDTO.getBirthDate() == null ? "birthDate" : "");
-    if (petDTO.getOwnerId() != 0) {
-      Customer owner = userService.getCustomer(petDTO.getOwnerId());
-      pet.setOwner(owner);
-    }
-    logger.info("changed to entity: " + pet);
-
-    return pet;
+  private List<PetDTO> dtoListFrom(List<Pet> pets) {
+    return pets.stream()
+        .peek(pet -> logger.info("received from db: " + pet))
+        .map(
+            pet -> {
+              try {
+                return dtoFrom(pet);
+              } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+                return null;
+              }
+            })
+        .collect(Collectors.toList());
   }
 }

@@ -3,8 +3,8 @@ package com.udacity.jdnd.course3.critter;
 import com.udacity.jdnd.course3.critter.presentation.pet.PetController;
 import com.udacity.jdnd.course3.critter.presentation.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.presentation.pet.PetType;
+import com.udacity.jdnd.course3.critter.presentation.user.CustomerController;
 import com.udacity.jdnd.course3.critter.presentation.user.CustomerDTO;
-import com.udacity.jdnd.course3.critter.presentation.user.UserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.udacity.jdnd.course3.critter.Helper.createCustomerDTO;
-import static com.udacity.jdnd.course3.critter.Helper.createPetDTO;
+import static com.udacity.jdnd.course3.critter.HelperClass.createCustomerDTO;
+import static com.udacity.jdnd.course3.critter.HelperClass.createPetDTO;
 
 @Transactional
 @SpringBootTest(classes = CritterApplication.class)
 public class PetTests {
 
-  @Autowired private PetController petController;
+  @Autowired private CustomerController customerController;
 
-  @Autowired private UserController userController;
+  @Autowired private PetController petController;
 
   @Test
   public void testFindPetsByOwner() throws Throwable {
     CustomerDTO customerDTO = createCustomerDTO();
-    CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
+    CustomerDTO newCustomer = customerController.saveCustomer(customerDTO);
 
     PetDTO petDTO = createPetDTO();
     petDTO.setOwnerId(newCustomer.getId());
@@ -45,13 +45,13 @@ public class PetTests {
   @Test
   public void testFindOwnerByPet() throws Throwable {
     CustomerDTO customerDTO = createCustomerDTO();
-    CustomerDTO newCustomer = userController.saveCustomer(customerDTO);
+    CustomerDTO newCustomer = customerController.saveCustomer(customerDTO);
 
     PetDTO petDTO = createPetDTO();
     petDTO.setOwnerId(newCustomer.getId());
     PetDTO newPet = petController.savePet(petDTO);
 
-    CustomerDTO owner = userController.getOwnerByPet(newPet.getId());
+    CustomerDTO owner = customerController.getOwnerByPet(newPet.getId());
     Assertions.assertEquals(owner.getId(), newCustomer.getId());
     Assertions.assertEquals(owner.getPetIds().get(0), newPet.getId());
   }
