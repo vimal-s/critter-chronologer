@@ -13,7 +13,9 @@ import java.util.Set;
 @Entity
 public class Employee {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Nationalized private String name;
 
@@ -52,8 +54,7 @@ public class Employee {
   }
 
   public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
-    this.daysAvailable =
-        daysAvailable == null ? null : new HashSet<>(daysAvailable);
+    this.daysAvailable = daysAvailable == null ? null : new HashSet<>(daysAvailable);
   }
 
   @Override
@@ -68,7 +69,6 @@ public class Employee {
         + Arrays.toString(getSkills().toArray())
         + ", daysAvailable="
         + Arrays.toString(getDaysAvailable().toArray())
-        +
-        '}';
+        + '}';
   }
 }

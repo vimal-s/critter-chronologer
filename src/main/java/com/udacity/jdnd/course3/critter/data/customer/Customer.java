@@ -13,13 +13,14 @@ import java.util.List;
 @Entity
 public class Customer implements Cloneable {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   @Nationalized private String name;
 
   private String phoneNumber;
 
-  // todo: details about this annotation
   @JsonManagedReference
   @OneToMany(mappedBy = "owner")
   private List<Pet> pets;
@@ -76,25 +77,6 @@ public class Customer implements Cloneable {
   }
 
   @Override
-  public String toString() {
-    return "Customer{"
-        + "id="
-        + id
-        + ", name='"
-        + name
-        + '\''
-        + ", phoneNumber='"
-        + phoneNumber
-        + '\''
-        + ", pets="
-        + Arrays.toString(getPets().toArray())
-        + ", notes='"
-        + notes
-        + '\''
-        + '}';
-  }
-
-  @Override
   public Object clone() throws CloneNotSupportedException {
     super.clone();
 
@@ -106,5 +88,24 @@ public class Customer implements Cloneable {
     customer.setNotes(getNotes());
 
     return customer;
+  }
+
+  @Override
+  public String toString() {
+    return "Customer{"
+            + "id="
+            + id
+            + ", name='"
+            + name
+            + '\''
+            + ", phoneNumber='"
+            + phoneNumber
+            + '\''
+            + ", pets="
+            + Arrays.toString(getPets().toArray())
+            + ", notes='"
+            + notes
+            + '\''
+            + '}';
   }
 }

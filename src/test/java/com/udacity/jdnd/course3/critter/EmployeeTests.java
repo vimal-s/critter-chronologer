@@ -1,7 +1,10 @@
 package com.udacity.jdnd.course3.critter;
 
 import com.google.common.collect.Sets;
-import com.udacity.jdnd.course3.critter.presentation.user.*;
+import com.udacity.jdnd.course3.critter.presentation.user.EmployeeController;
+import com.udacity.jdnd.course3.critter.presentation.user.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.presentation.user.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,7 @@ public class EmployeeTests {
   @Autowired private EmployeeController employeeController;
 
   @Test
-  public void testCreateEmployee() throws Throwable {
+  public void testCreateEmployee() {
     EmployeeDTO employeeDTO = createEmployeeDTO();
     EmployeeDTO newEmployee = employeeController.saveEmployee(employeeDTO);
     EmployeeDTO retrievedEmployee = employeeController.getEmployee(newEmployee.getId());
@@ -32,7 +35,7 @@ public class EmployeeTests {
   }
 
   @Test
-  public void testChangeEmployeeAvailability() throws Throwable {
+  public void testChangeEmployeeAvailability() {
     EmployeeDTO employeeDTO = createEmployeeDTO();
     EmployeeDTO emp1 = employeeController.saveEmployee(employeeDTO);
     Assertions.assertTrue(emp1.getDaysAvailable().isEmpty());

@@ -11,7 +11,9 @@ import java.time.LocalDate;
 @Entity
 public class Pet {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   private PetType type;
 
@@ -76,7 +78,7 @@ public class Pet {
 
   // accessing owner here causes StackOverflowError due to circular dependency between Pet and
   // Customer
-  // I think this is related to Comparable interface in Customer class
+  // I think this is related to implementing Comparable interface in Customer class
   @Override
   public String toString() {
     return "Pet{"

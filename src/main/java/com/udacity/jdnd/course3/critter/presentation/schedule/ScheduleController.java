@@ -25,12 +25,8 @@ public class ScheduleController {
 
   @PostMapping
   public ScheduleDTO createSchedule(@Valid @RequestBody ScheduleDTO scheduleDTO) {
-    logger.info("received from client: " + scheduleDTO);
-
     Schedule schedule = entityFrom(scheduleDTO);
     schedule = scheduleService.create(schedule);
-    logger.info("received from db: " + schedule);
-
     return dtoFrom(schedule);
   }
 
@@ -61,21 +57,18 @@ public class ScheduleController {
   private ScheduleDTO dtoFrom(Schedule schedule) {
     ScheduleDTO scheduleDTO = new ScheduleDTO();
     BeanUtils.copyProperties(schedule, scheduleDTO);
-    logger.info("changed to dto: " + scheduleDTO);
     return scheduleDTO;
   }
 
   private Schedule entityFrom(ScheduleDTO scheduleDTO) {
     Schedule schedule = new Schedule();
     BeanUtils.copyProperties(scheduleDTO, schedule);
-    logger.info("changed to entity: " + schedule);
     return schedule;
   }
 
   private List<ScheduleDTO> dtoListFrom(List<Schedule> schedules) {
     return schedules.stream()
-            .peek(schedule -> logger.info("received from db: " + schedule))
-            .map(this::dtoFrom)
-            .collect(Collectors.toList());
+        .map(this::dtoFrom)
+        .collect(Collectors.toList());
   }
 }

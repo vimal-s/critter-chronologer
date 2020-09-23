@@ -9,7 +9,6 @@ import java.time.LocalDate;
  */
 public class PetDTO {
 
-  // todo: using boxed type here causes tests to fail
   private long id;
 
   @NotNull(message = "type of pet is required")
@@ -17,8 +16,7 @@ public class PetDTO {
 
   private String name;
 
-  // todo: should I enforce owner
-  // @NotNull(message = "Owner id is required")
+  @NotNull(message = "Owner id is required")
   private Long ownerId;
 
   private LocalDate birthDate;
@@ -41,11 +39,11 @@ public class PetDTO {
     this.name = name;
   }
 
-  public long getOwnerId() {
+  public Long getOwnerId() {
     return ownerId;
   }
 
-  public void setOwnerId(long ownerId) {
+  public void setOwnerId(Long ownerId) {
     this.ownerId = ownerId;
   }
 

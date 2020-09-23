@@ -37,14 +37,6 @@ public class HelperClass {
     return petDTO;
   }
 
-  // todo: delete this later
-  private static EmployeeRequestDTO createEmployeeRequestDTO() {
-    EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
-    employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
-    employeeRequestDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
-    return employeeRequestDTO;
-  }
-
   static ScheduleDTO createScheduleDTO(
       List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
     ScheduleDTO scheduleDTO = new ScheduleDTO();
@@ -57,7 +49,6 @@ public class HelperClass {
 
   static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
     Assertions.assertArrayEquals(sched1.getPetIds().toArray(), sched2.getPetIds().toArray());
-    // todo: debug if activity objects are same or different here
     Assertions.assertEquals(sched1.getActivities(), sched2.getActivities());
     Assertions.assertArrayEquals(
         sched1.getEmployeeIds().toArray(), sched2.getEmployeeIds().toArray());

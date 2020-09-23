@@ -5,7 +5,9 @@ import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Represents the form that schedule request and response data takes. Does not map to the database

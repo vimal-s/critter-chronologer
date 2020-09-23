@@ -9,7 +9,9 @@ import java.util.*;
 @Entity
 public class Schedule {
 
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   private LocalDate date;
 
@@ -36,7 +38,9 @@ public class Schedule {
   }
 
   public List<Long> getEmployeeIds() {
-    return employeeIds == null ? Collections.emptyList() : Collections.unmodifiableList(employeeIds);
+    return employeeIds == null
+        ? Collections.emptyList()
+        : Collections.unmodifiableList(employeeIds);
   }
 
   public void setEmployeeIds(List<Long> employeeIds) {

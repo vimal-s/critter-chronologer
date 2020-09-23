@@ -1,13 +1,14 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -15,72 +16,69 @@ public class ScheduleService {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final ScheduleRepository scheduleRepository;
   private final PetService petService;
-  private final UserService userService;
+  private final EmployeeService employeeService;
 
   public ScheduleService(
-      ScheduleRepository scheduleRepository, PetService petService, UserService userService) {
+          ScheduleRepository scheduleRepository,
+          PetService petService,
+          EmployeeService employeeService) {
     this.scheduleRepository = scheduleRepository;
     this.petService = petService;
-    this.userService = userService;
+    this.employeeService = employeeService;
   }
 
-  // todo: how can I combine the two checks
-  // suggestion: avoid creating schedule for pet with no owner
   public Schedule create(Schedule schedule) {
-    logger.info("Saving to db: " + schedule);
+    for (Long petId : schedule.getPetIds()) {
+      if (!petService.exists(petId)) {
+        throw new RuntimeException("Pet not found with id: " + petId);
+      }
+    }
 
-    schedule
-        .getPetIds()
-        .forEach(
-            petId -> {
-              if (!petService.exists(petId)) {
-                throw new RuntimeException("Pet not found with id: " + petId);
-              }
-            });
-
-    schedule
-        .getEmployeeIds()
-        .forEach(
-            employeeId -> {
-              if (!userService.exists(employeeId)) {
-                throw new RuntimeException("Employee not found with id: " + employeeId);
-              }
-            });
+    for (Long employeeId : schedule.getEmployeeIds()) {
+      if (!employeeService.exists(employeeId)) {
+        throw new RuntimeException("Employee not found with id: " + employeeId);
+      }
+    }
 
     return scheduleRepository.save(schedule);
   }
 
   public List<Schedule> getAllSchedules() {
-    logger.info("Retrieving all from db");
     return scheduleRepository.findAll();
   }
 
   public List<Schedule> getAllByEmployee(Long id) {
-    logger.info("Finding by employee with id: " + id);
     return scheduleRepository.findByEmployeeIds(id);
   }
 
   public List<Schedule> getAllByPet(Long id) {
-    logger.info("Finding by pet with id: " + id);
     return scheduleRepository.findByPetIds(id);
   }
 
-  // todo: look for better alternative here
   public List<Schedule> getAllByOwner(Long id) {
-    logger.info("Finding by owner with id: " + id);
-    return getAllSchedules().stream()
-        .filter(
-            schedule ->
-                schedule.getPetIds().stream()
-                    .anyMatch(
-                        aLong -> {
-                          try {
-                            return petService.getOwnerByPet(aLong).getId().equals(id);
-                          } catch (Throwable throwable) {
-                            logger.info(throwable.getMessage());
-                            return false;
-                          }
-                        }))
-        .collect(Collectors.toList());
+    List<Schedule> schedules = new ArrayList<>();
+
+    List<Pet> pets = petService.getPetsByOwner(id);
+    for (Pet pet : pets) {
+      schedules.addAll(getAllByPet(pet.getId()));
+    }
+
+    return schedules;
+    /*
+        return getAllSchedules().stream()
+            .filter(
+                schedule ->
+                    schedule.getPetIds().stream()
+                        .anyMatch(
+                            petId -> {
+                              try {
+                                return petService.getOwnerByPet(petId).getId().equals(id);
+                              } catch (Throwable throwable) {
+                                throwable.printStackTrace();
+                                return false;
+                              }
+                            }))
+            .collect(Collectors.toList());
+    */
   }
 }

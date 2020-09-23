@@ -27,18 +27,20 @@ public class EmployeeRequestDTO {
   }
 
   public Set<EmployeeSkill> getSkills() {
-    return skills;
+    return skills == null ? Collections.emptySet() : Collections.unmodifiableSet(skills);
   }
 
   public void setSkills(Set<EmployeeSkill> skills) {
-    this.skills = skills;
+    this.skills = skills == null ? null : new HashSet<>(skills);
   }
 
   @Override
   public String toString() {
-    return "EmployeeRequestDTO{" +
-            "date=" + date +
-            ", skills=" + (skills == null ? null : Arrays.toString(skills.toArray())) +
-            '}';
+    return "EmployeeRequestDTO{"
+        + "date="
+        + date
+        + ", skills="
+        + (skills == null ? null : Arrays.toString(skills.toArray()))
+        + '}';
   }
 }

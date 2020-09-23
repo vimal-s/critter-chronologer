@@ -53,7 +53,6 @@ public class CustomerTests {
     Assertions.assertEquals(newPet.getName(), pets.get(0).getName());
 
     // check to make sure customer now also contains pet
-    // todo: test fails here but runs successfully with postman
     CustomerDTO retrievedCustomer = customerController.getAllCustomers().get(0);
     Assertions.assertTrue(
         retrievedCustomer.getPetIds() != null && retrievedCustomer.getPetIds().size() > 0);

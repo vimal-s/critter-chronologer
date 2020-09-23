@@ -55,7 +55,6 @@ public class ScheduleTests {
 
     Assertions.assertEquals(scheduleDTO.getActivities(), skillSet);
     Assertions.assertEquals(scheduleDTO.getDate(), date);
-    // todo: hibernate persistent bag vs java arraylist
     Assertions.assertArrayEquals(scheduleDTO.getEmployeeIds().toArray(), employeeList.toArray());
     Assertions.assertArrayEquals(scheduleDTO.getPetIds().toArray(), petList.toArray());
   }
@@ -101,7 +100,6 @@ public class ScheduleTests {
     compareSchedules(sched1, scheds1p.get(0));
 
     // Pet from schedule 2 is in both schedules 2 and 3
-    // todo: why no error here?
     List<ScheduleDTO> scheds2p = scheduleController.getScheduleForPet(sched2.getPetIds().get(0));
     compareSchedules(sched2, scheds2p.get(0));
     compareSchedules(sched3, scheds2p.get(1));
