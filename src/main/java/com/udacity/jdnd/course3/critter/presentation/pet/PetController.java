@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.presentation.pet;
 
-import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.service.CustomerService;
 import com.udacity.jdnd.course3.critter.service.PetService;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Handles web requests related to Pets. */
@@ -30,25 +30,30 @@ public class PetController {
   @PostMapping
   public PetDTO savePet(@Valid @RequestBody PetDTO petDTO) throws Throwable {
     Pet pet = entityFrom(petDTO);
+
     pet = petService.save(pet);
+
     return dtoFrom(pet);
   }
 
   @GetMapping("/{petId}")
   public PetDTO getPet(@PathVariable long petId) throws Throwable {
     Pet pet = petService.getPet(petId);
+
     return dtoFrom(pet);
   }
 
   @GetMapping
   public List<PetDTO> getPets() {
     List<Pet> pets = petService.getAllPets();
+
     return dtoListFrom(pets);
   }
 
   @GetMapping("/owner/{ownerId}")
   public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
     List<Pet> pets = petService.getPetsByOwner(ownerId);
+
     return dtoListFrom(pets);
   }
 
@@ -56,8 +61,7 @@ public class PetController {
     Pet pet = new Pet();
 
     BeanUtils.copyProperties(petDTO, pet, petDTO.getBirthDate() == null ? "birthDate" : "");
-    Customer owner = customerService.getCustomer(petDTO.getOwnerId());
-    pet.setOwner(owner);
+    pet.setOwner(customerService.getCustomer(petDTO.getOwnerId()));
 
     return pet;
   }
@@ -74,16 +78,17 @@ public class PetController {
   }
 
   private List<PetDTO> dtoListFrom(List<Pet> pets) {
-    return pets.stream()
-        .map(
-            pet -> {
-              try {
-                return dtoFrom(pet);
-              } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-                return null;
-              }
-            })
-        .collect(Collectors.toList());
+    return pets.stream().map(petToPetDTO()).collect(Collectors.toList());
+  }
+
+  private Function<Pet, PetDTO> petToPetDTO() {
+    return pet -> {
+      try {
+        return dtoFrom(pet);
+      } catch (CloneNotSupportedException e) {
+        e.printStackTrace();
+        return null;
+      }
+    };
   }
 }

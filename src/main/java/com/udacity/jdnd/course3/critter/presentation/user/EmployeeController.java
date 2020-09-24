@@ -28,14 +28,16 @@ public class EmployeeController {
   @PostMapping("/employee")
   public EmployeeDTO saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
     Employee employee = entityFrom(employeeDTO);
+
     employee = employeeService.save(employee);
-    employeeDTO = dtoFrom(employee);
-    return employeeDTO;
+
+    return dtoFrom(employee);
   }
 
   @GetMapping("/employee/{employeeId}")
   public EmployeeDTO getEmployee(@PathVariable long employeeId) {
     Employee employee = employeeService.getEmployee(employeeId);
+
     return dtoFrom(employee);
   }
 
@@ -57,13 +59,17 @@ public class EmployeeController {
 
   private Employee entityFrom(EmployeeDTO employeeDTO) {
     Employee employee = new Employee();
+
     BeanUtils.copyProperties(employeeDTO, employee);
+
     return employee;
   }
 
   private EmployeeDTO dtoFrom(Employee employee) {
     EmployeeDTO employeeDTO = new EmployeeDTO();
+
     BeanUtils.copyProperties(employee, employeeDTO);
+
     return employeeDTO;
   }
 }

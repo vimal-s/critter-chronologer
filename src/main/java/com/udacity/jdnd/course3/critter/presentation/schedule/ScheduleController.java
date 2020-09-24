@@ -35,31 +35,37 @@ public class ScheduleController {
   @PostMapping
   public ScheduleDTO createSchedule(@Valid @RequestBody ScheduleDTO scheduleDTO) {
     Schedule schedule = entityFrom(scheduleDTO);
+
     schedule = scheduleService.create(schedule);
+
     return dtoFrom(schedule);
   }
 
   @GetMapping
   public List<ScheduleDTO> getAllSchedules() {
     List<Schedule> schedules = scheduleService.getAllSchedules();
+
     return dtoListFrom(schedules);
   }
 
   @GetMapping("/pet/{petId}")
   public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
     List<Schedule> schedules = scheduleService.getAllByPet(petId);
+
     return dtoListFrom(schedules);
   }
 
   @GetMapping("/employee/{employeeId}")
   public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
     List<Schedule> schedules = scheduleService.getAllByEmployee(employeeId);
+
     return dtoListFrom(schedules);
   }
 
   @GetMapping("/customer/{customerId}")
   public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
     List<Schedule> schedules = scheduleService.getAllByOwner(customerId);
+
     return dtoListFrom(schedules);
   }
 

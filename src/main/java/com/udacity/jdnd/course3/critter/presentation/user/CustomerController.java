@@ -30,9 +30,10 @@ public class CustomerController {
   @PostMapping("/customer")
   public CustomerDTO saveCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
     Customer customer = entityFrom(customerDTO);
+
     customer = customerService.save(customer);
-    customerDTO = dtoFrom(customer);
-    return customerDTO;
+
+    return dtoFrom(customer);
   }
 
   @GetMapping("/customer")
@@ -45,12 +46,15 @@ public class CustomerController {
   @GetMapping("/customer/pet/{petId}")
   public CustomerDTO getOwnerByPet(@PathVariable long petId) throws Throwable {
     Customer owner = petService.getOwnerByPet(petId);
+
     return dtoFrom(owner);
   }
 
   private Customer entityFrom(CustomerDTO customerDTO) {
     Customer customer = new Customer();
+
     BeanUtils.copyProperties(customerDTO, customer);
+
     return customer;
   }
 
@@ -58,11 +62,11 @@ public class CustomerController {
     if (customer == null) {
       return null;
     }
+
     CustomerDTO customerDTO = new CustomerDTO();
 
     BeanUtils.copyProperties(customer, customerDTO);
-    List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
-    customerDTO.setPetIds(petIds);
+    customerDTO.setPetIds(customer.getPets().stream().map(Pet::getId).collect(Collectors.toList()));
 
     return customerDTO;
   }
