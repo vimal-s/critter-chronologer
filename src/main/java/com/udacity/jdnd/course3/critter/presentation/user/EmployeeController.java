@@ -42,9 +42,11 @@ public class EmployeeController {
   }
 
   @PutMapping("/employee/{employeeId}")
-  public void setAvailability(
+  public EmployeeDTO setAvailability(
       @RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-    employeeService.setAvailability(daysAvailable, employeeId);
+    Employee employee = employeeService.setAvailability(daysAvailable, employeeId);
+
+    return dtoFrom(employee);
   }
 
   @GetMapping("/employee/availability")

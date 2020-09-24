@@ -39,10 +39,10 @@ public class EmployeeService {
         .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
   }
 
-  public void setAvailability(Set<DayOfWeek> daysAvailable, Long id) {
+  public Employee setAvailability(Set<DayOfWeek> daysAvailable, Long id) {
     Employee employee = getEmployee(id);
     employee.setDaysAvailable(daysAvailable);
-    employeeRepository.save(employee);
+    return employeeRepository.save(employee);
   }
 
   public List<Employee> getEmployeesForService(
