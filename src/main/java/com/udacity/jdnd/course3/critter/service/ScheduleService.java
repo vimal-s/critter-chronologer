@@ -7,11 +7,13 @@ import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ScheduleService {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
