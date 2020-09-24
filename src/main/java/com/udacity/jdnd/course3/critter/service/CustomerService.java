@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.data.customer.CustomerRepository;
+import com.udacity.jdnd.course3.critter.service.exception.CustomerNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CustomerService {
   public Customer getCustomer(Long id) {
     return customerRepository
         .findById(id)
-        .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
+        .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
   }
 
   public List<Customer> getAllCustomers() {

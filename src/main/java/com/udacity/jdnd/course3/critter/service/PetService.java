@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.data.customer.Customer;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.pet.PetRepository;
+import com.udacity.jdnd.course3.critter.service.exception.PetNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class PetService {
   public Pet getPet(Long id) {
     return petRepository
         .findById(id)
-        .orElseThrow(() -> new RuntimeException("Pet not found with id: " + id));
+        .orElseThrow(() -> new PetNotFoundException("Pet not found with id: " + id));
   }
 
   public List<Pet> getAllPets() {

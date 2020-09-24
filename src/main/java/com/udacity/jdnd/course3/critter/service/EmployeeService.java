@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.employee.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.service.exception.EmployeeNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class EmployeeService {
   public Employee getEmployee(Long id) {
     return employeeRepository
         .findById(id)
-        .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+        .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
   }
 
   public void setAvailability(Set<DayOfWeek> daysAvailable, Long id) {

@@ -4,6 +4,7 @@ import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
+import com.udacity.jdnd.course3.critter.service.exception.ScheduleNotCreatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,13 @@ public class ScheduleService {
 
     for (Pet pet : schedule.getPets()) {
       if (!petService.exists(pet.getId())) {
-        throw new RuntimeException("Pet not found with id: " + pet.getId());
+        throw new ScheduleNotCreatedException("Pet not found with id: " + pet.getId());
       }
     }
 
     for (Employee employee : schedule.getEmployees()) {
       if (!employeeService.exists(employee.getId())) {
-        throw new RuntimeException("Employee not found with id: " + employee.getId());
+        throw new ScheduleNotCreatedException("Employee not found with id: " + employee.getId());
       }
     }
 
@@ -68,21 +69,5 @@ public class ScheduleService {
     }
 
     return schedules;
-    /*
-        return getAllSchedules().stream()
-            .filter(
-                schedule ->
-                    schedule.getPetIds().stream()
-                        .anyMatch(
-                            petId -> {
-                              try {
-                                return petService.getOwnerByPet(petId).getId().equals(id);
-                              } catch (Throwable throwable) {
-                                throwable.printStackTrace();
-                                return false;
-                              }
-                            }))
-            .collect(Collectors.toList());
-    */
   }
 }
