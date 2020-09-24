@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.service;
 
+import com.udacity.jdnd.course3.critter.data.employee.Employee;
 import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.data.schedule.ScheduleRepository;
@@ -28,15 +29,16 @@ public class ScheduleService {
   }
 
   public Schedule create(Schedule schedule) {
-    for (Long petId : schedule.getPetIds()) {
-      if (!petService.exists(petId)) {
-        throw new RuntimeException("Pet not found with id: " + petId);
+
+    for (Pet pet : schedule.getPets()) {
+      if (!petService.exists(pet.getId())) {
+        throw new RuntimeException("Pet not found with id: " + pet.getId());
       }
     }
 
-    for (Long employeeId : schedule.getEmployeeIds()) {
-      if (!employeeService.exists(employeeId)) {
-        throw new RuntimeException("Employee not found with id: " + employeeId);
+    for (Employee employee : schedule.getEmployees()) {
+      if (!employeeService.exists(employee.getId())) {
+        throw new RuntimeException("Employee not found with id: " + employee.getId());
       }
     }
 
@@ -48,11 +50,11 @@ public class ScheduleService {
   }
 
   public List<Schedule> getAllByEmployee(Long id) {
-    return scheduleRepository.findByEmployeeIds(id);
+    return scheduleRepository.findByEmployees_id(id);
   }
 
   public List<Schedule> getAllByPet(Long id) {
-    return scheduleRepository.findByPetIds(id);
+    return scheduleRepository.findByPets_id(id);
   }
 
   public List<Schedule> getAllByOwner(Long id) {

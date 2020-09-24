@@ -1,6 +1,10 @@
 package com.udacity.jdnd.course3.critter.presentation.schedule;
 
+import com.udacity.jdnd.course3.critter.data.employee.Employee;
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.data.schedule.Schedule;
+import com.udacity.jdnd.course3.critter.service.EmployeeService;
+import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.ScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +22,14 @@ public class ScheduleController {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final ScheduleService scheduleService;
+  private final EmployeeService employeeService;
+  private final PetService petService;
 
-  public ScheduleController(ScheduleService scheduleService) {
+  public ScheduleController(
+      ScheduleService scheduleService, EmployeeService employeeService, PetService petService) {
     this.scheduleService = scheduleService;
+    this.employeeService = employeeService;
+    this.petService = petService;
   }
 
   @PostMapping
@@ -56,19 +65,43 @@ public class ScheduleController {
 
   private ScheduleDTO dtoFrom(Schedule schedule) {
     ScheduleDTO scheduleDTO = new ScheduleDTO();
+
     BeanUtils.copyProperties(schedule, scheduleDTO);
+    scheduleDTO.setEmployeeIds(getEmployeeIds(schedule));
+    scheduleDTO.setPetIds(getPetIds(schedule));
+
     return scheduleDTO;
   }
 
   private Schedule entityFrom(ScheduleDTO scheduleDTO) {
     Schedule schedule = new Schedule();
+
     BeanUtils.copyProperties(scheduleDTO, schedule);
+    schedule.setEmployees(getEmployees(scheduleDTO));
+    schedule.setPets(getPets(scheduleDTO));
+
     return schedule;
   }
 
   private List<ScheduleDTO> dtoListFrom(List<Schedule> schedules) {
-    return schedules.stream()
-        .map(this::dtoFrom)
+    return schedules.stream().map(this::dtoFrom).collect(Collectors.toList());
+  }
+
+  private List<Employee> getEmployees(ScheduleDTO scheduleDTO) {
+    return scheduleDTO.getEmployeeIds().stream()
+        .map(employeeService::getEmployee)
         .collect(Collectors.toList());
+  }
+
+  private List<Pet> getPets(ScheduleDTO scheduleDTO) {
+    return scheduleDTO.getPetIds().stream().map(petService::getPet).collect(Collectors.toList());
+  }
+
+  private List<Long> getEmployeeIds(Schedule schedule) {
+    return schedule.getEmployees().stream().map(Employee::getId).collect(Collectors.toList());
+  }
+
+  private List<Long> getPetIds(Schedule schedule) {
+    return schedule.getPets().stream().map(Pet::getId).collect(Collectors.toList());
   }
 }

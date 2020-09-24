@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.data.schedule;
 
+import com.udacity.jdnd.course3.critter.data.employee.Employee;
+import com.udacity.jdnd.course3.critter.data.pet.Pet;
 import com.udacity.jdnd.course3.critter.presentation.user.EmployeeSkill;
 
 import javax.persistence.*;
@@ -15,9 +17,19 @@ public class Schedule {
 
   private LocalDate date;
 
-  @ElementCollection private List<Long> employeeIds;
+  @ManyToMany
+  @JoinTable(
+      name = "employee_schedule",
+      joinColumns = @JoinColumn(name = "schedule_id"),
+      inverseJoinColumns = @JoinColumn(name = "employee_id"))
+  private List<Employee> employees;
 
-  @ElementCollection private List<Long> petIds;
+  @ManyToMany
+  @JoinTable(
+      name = "pet_schedule",
+      joinColumns = @JoinColumn(name = "schedule_id"),
+      inverseJoinColumns = @JoinColumn(name = "pet_id"))
+  private List<Pet> pets;
 
   @ElementCollection private Set<EmployeeSkill> activities;
 
@@ -37,22 +49,20 @@ public class Schedule {
     this.date = date;
   }
 
-  public List<Long> getEmployeeIds() {
-    return employeeIds == null
-        ? Collections.emptyList()
-        : Collections.unmodifiableList(employeeIds);
+  public List<Employee> getEmployees() {
+    return employees == null ? Collections.emptyList() : Collections.unmodifiableList(employees);
   }
 
-  public void setEmployeeIds(List<Long> employeeIds) {
-    this.employeeIds = employeeIds == null ? null : new ArrayList<>(employeeIds);
+  public void setEmployees(List<Employee> employees) {
+    this.employees = employees == null ? null : new ArrayList<>(employees);
   }
 
-  public List<Long> getPetIds() {
-    return petIds == null ? Collections.emptyList() : Collections.unmodifiableList(petIds);
+  public List<Pet> getPets() {
+    return pets == null ? Collections.emptyList() : Collections.unmodifiableList(pets);
   }
 
-  public void setPetIds(List<Long> petIds) {
-    this.petIds = petIds == null ? null : new ArrayList<>(petIds);
+  public void setPets(List<Pet> pets) {
+    this.pets = pets == null ? null : new ArrayList<>(pets);
   }
 
   public Set<EmployeeSkill> getActivities() {
@@ -70,10 +80,10 @@ public class Schedule {
         + id
         + ", date="
         + date
-        + ", employeeIds="
-        + Arrays.toString(getEmployeeIds().toArray())
-        + ", petIds="
-        + Arrays.toString(getPetIds().toArray())
+        + ", employees="
+        + Arrays.toString(getEmployees().toArray())
+        + ", pets="
+        + Arrays.toString(getPets().toArray())
         + ", activities="
         + Arrays.toString(getActivities().toArray())
         + '}';

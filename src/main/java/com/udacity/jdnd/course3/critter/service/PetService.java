@@ -35,7 +35,7 @@ public class PetService {
     return petRepository.existsById(petId);
   }
 
-  public Pet getPet(Long id) throws Throwable {
+  public Pet getPet(Long id) {
     return petRepository
         .findById(id)
         .orElseThrow(() -> new RuntimeException("Pet not found with id: " + id));
